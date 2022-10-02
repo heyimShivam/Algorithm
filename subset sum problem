@@ -1,0 +1,63 @@
+Given an array of non-negative integers, and a value sum, determine if there is a subset of the given set with sum equal to given sum. 
+
+N = 6
+arr[] = {3, 34, 4, 12, 5, 2}
+sum = 9
+Output: 1 
+Explanation: Here there exists a subset with
+sum = 9, 4+3+2 = 9.'
+
+
+#include<bits/stdc++.h> 
+using namespace std; 
+
+
+class Solution{   
+public:
+    bool isSubsetSum(vector<int>arr, int sum){
+        int n=arr.size();
+        bool dp[n+1][sum+1];
+      for(int i=0;i<n+1;i++){
+            for(int j=0;j<sum+1;j++){
+                if(i==0 && j==0){
+                    dp[i][j]=true;
+                }
+                else if(i==0)
+                dp[i][j]=false;
+                else if(j==0)
+                dp[i][j]=true;
+                else{
+                      dp[i][j] = dp[i - 1][j]; 
+                    int val = arr[i - 1];    
+                 if (j >= val)
+                  dp[i][j] = dp[i - 1][j] || dp[i - 1][j - val];
+                }
+                else{
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+      }
+        return dp[n][sum];
+    }
+};
+
+
+int main() 
+{ 
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int N, sum;
+        cin >> N;
+        vector<int> arr(N);
+        for(int i = 0; i < N; i++){
+            cin >> arr[i];
+        }
+        cin >> sum;
+        
+        Solution ob;
+        cout << ob.isSubsetSum(arr, sum) << endl;
+    }
+    return 0; 
+} 
