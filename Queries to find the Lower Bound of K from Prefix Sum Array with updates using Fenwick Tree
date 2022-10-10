@@ -1,0 +1,147 @@
+// C++ program to implement
+// the above approach
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to calculate and return
+// the sum of arr[0..index]
+int getSum(int BITree[], int index)
+{
+	int ans = 0;
+	index += 1;
+
+	// Traverse ancestors
+	// of BITree[index]
+	while (index > 0)
+	{
+		
+		// Update the sum of current
+		// element of BIT to ans
+		ans += BITree[index];
+
+		// Update index to that
+		// of the parent node in
+		// getSum() view by
+		// subtracting LSB(Least
+		// Significant Bit)
+		index -= index & (-index);
+	}
+	return ans;
+}
+
+// Function to update the Binary Index
+// Tree by replacing all ancestors of
+// index by their respective sum with val
+static void updateBIT(int BITree[], int n,
+					int index, int val)
+{
+	index = index + 1;
+
+	// Traverse all ancestors
+	// and sum with 'val'.
+	while (index <= n)
+	{
+		
+		// Add 'val' to current
+		// node of BIT
+		BITree[index] += val;
+
+		// Update index to that
+		// of the parent node in
+		// updateBit() view by
+		// adding LSB(Least
+		// Significant Bit)
+		index += index & (-index);
+	}
+}
+
+// Function to construct the Binary
+// Indexed Tree for the given array
+int* constructBITree(int arr[], int n)
+{
+	
+	// Initialize the
+	// Binary Indexed Tree
+	int* BITree = new int[n + 1];
+
+	for(int i = 0; i <= n; i++)
+		BITree[i] = 0;
+
+	// Store the actual values in
+	// BITree[] using update()
+	for(int i = 0; i < n; i++)
+		updateBIT(BITree, n, i, arr[i]);
+
+	return BITree;
+}
+
+// Function to obtain and return
+// the index of lower_bound of k
+int getLowerBound(int BITree[], int arr[],
+				int n, int k)
+{
+	int lb = -1;
+	int l = 0, r = n - 1;
+
+	while (l <= r)
+	{
+		int mid = l + (r - l) / 2;
+		if (getSum(BITree, mid) >= k)
+		{
+			r = mid - 1;
+			lb = mid;
+		}
+		else
+			l = mid + 1;
+	}
+	return lb;
+}
+
+void performQueries(int A[], int n, int q[][3])
+{
+	
+	// Store the Binary Indexed Tree
+	int* BITree = constructBITree(A, n);
+
+	// Solve each query in Q
+	for(int i = 0;
+			i < sizeof(q[0]) / sizeof(int);
+			i++)
+	{
+		int id = q[i][0];
+
+		if (id == 1)
+		{
+			int idx = q[i][1];
+			int val = q[i][2];
+			A[idx] += val;
+
+			// Update the values of all
+			// ancestors of idx
+			updateBIT(BITree, n, idx, val);
+		}
+		else
+		{
+			int k = q[i][1];
+			int lb = getLowerBound(BITree,
+								A, n, k);
+			cout << lb << endl;
+		}
+	}
+}
+
+// Driver Code
+int main()
+{
+	int A[] = { 1, 2, 3, 5, 8 };
+
+	int n = sizeof(A) / sizeof(int);
+
+	int q[][3] = { { 1, 0, 2 },
+				{ 2, 5, 0 },
+				{ 1, 3, 5 } };
+
+	performQueries(A, n, q);
+}
+
+// This code is contributed by jrishabh99
