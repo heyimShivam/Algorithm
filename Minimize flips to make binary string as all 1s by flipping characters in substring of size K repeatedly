@@ -1,0 +1,63 @@
+// C++ program for the above approach
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find the minimum number
+// of operations required to convert all
+// the characters to 1 by flipping the
+// substrings of size K
+void minOperation(string S, int K, int N)
+{
+
+	// Stores the minimum number of
+	// operations required
+	int min = 0;
+
+	int i;
+
+	// Traverse the string S
+	for (i = 0; i < N; i++) {
+
+		// If the character is 0
+		if (S[i] == '0' && i + K <= N) {
+
+			// Flip the substrings of
+			// size K starting from i
+			for (int j = i; j < i + K; j++) {
+				if (S[j] == '1')
+					S[j] = '0';
+				else
+					S[j] = '1';
+			}
+
+			// Increment the minimum count
+			// of operations required
+			min++;
+		}
+	}
+
+	// After performing the operations
+	// check if string S contains any 0s
+	for (i = 0; i < N; i++) {
+		if (S[i] == '0')
+			break;
+	}
+
+	// If S contains only 1's
+	if (i == N)
+		cout << min;
+	else
+		cout << -1;
+}
+
+// Driver Code
+int main()
+{
+
+	string S = "00010110";
+	int K = 3;
+	int N = S.length();
+	minOperation(S, K, N);
+
+	return 0;
+}
