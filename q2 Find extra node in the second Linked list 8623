@@ -1,0 +1,78 @@
+// C++ program to find the
+// extra node
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Node of the singly linked
+// list
+struct Node {
+	int data;
+	Node* next;
+};
+
+// Function to insert a node at
+// the beginning of the singly
+// Linked List
+void push(Node** head_ref,
+		int new_data)
+{
+	// allocate node
+	Node* new_node =
+	(Node*)malloc(sizeof
+				(struct Node));
+
+	// put in the data
+	new_node->data = new_data;
+
+	// link the old list off the
+	// new node
+	new_node->next = (*head_ref);
+
+	// move the head to point to
+	// the new node
+	(*head_ref) = new_node;
+}
+
+int print(Node* head_ref,
+		Node* head_ref1)
+{
+	int ans = 0;
+
+	Node* ptr1 = head_ref;
+	Node* ptr2 = head_ref1;
+	// Traverse the linked list
+	while (ptr1 != NULL) {
+		ans ^= ptr1->data;
+		ptr1 = ptr1->next;
+	}
+	while (ptr2 != NULL) {
+		ans ^= ptr2->data;
+		ptr2 = ptr2->next;
+	}
+	return ans;
+}
+
+
+int main()
+{
+	// start with the empty list
+	Node* head1 = NULL;
+	Node* head2 = NULL;
+	// create the linked list
+	// 15 -> 16 -> 7 -> 6 -> 17
+	push(&head1, 17);
+	push(&head1, 7);
+	push(&head1, 6);
+	push(&head1, 16);
+
+	// second LL
+	push(&head2, 17);
+	push(&head2, 7);
+	push(&head2, 6);
+	push(&head2, 16);
+	push(&head1, 15);
+	int k = print(head1, head2);
+	cout << k;
+	return 0;
+}
