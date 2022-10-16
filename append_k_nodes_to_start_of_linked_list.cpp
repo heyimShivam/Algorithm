@@ -1,4 +1,4 @@
-#inclue<bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 class node{
   public:
@@ -8,7 +8,7 @@ class node{
     data=val;
     next=NULL;
   }
-}
+};
 void insertAtHead(node* &head,int val){
 node* n=new node(val);
   n->next=head;
@@ -56,7 +56,14 @@ if(count==l-k+1){
   tail->next=head;
   return newHead;
 }
-int_32 main(){
+void display(node* head){
+node *temp=head;
+  while(temp!=NULL){
+    cout<<temp->data<<"->";
+    temp=temp->next;
+  }cout<<"NULL"<<endl;  
+}
+int main(){
   node *head=NULL;
   int arr[]={1,2,3,4,5,6};
   for(int i=0;i<6;i++){
@@ -66,13 +73,5 @@ int_32 main(){
   node*newHead=kappend(head,3);
   display(newHead);
   return 0;
-}
-}
-void display(node* head){
-node *temp=head;
-  while(temp!=NULL){
-    cout<<temp->data<<"->";
-    temp=temp->next;
-  }cout<<"NULL"<<endl;  
 }
 
