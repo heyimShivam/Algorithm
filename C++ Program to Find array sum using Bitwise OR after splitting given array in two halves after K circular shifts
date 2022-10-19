@@ -1,0 +1,100 @@
+// C++ Program to find Bitwise OR of two
+// equal halves of an array after performing
+// K right circular shifts
+#include <bits/stdc++.h>
+const int MAX = 100005;
+using namespace std;
+
+// Array for storing
+// the segment tree
+int seg[4 * MAX];
+
+// Function to build the segment tree
+void build(int node, int l, int r, int a[])
+{
+	if (l == r)
+		seg[node] = a[l];
+
+	else {
+		int mid = (l + r) / 2;
+
+		build(2 * node, l, mid, a);
+		build(2 * node + 1, mid + 1, r, a);
+
+		seg[node] = (seg[2 * node]
+					| seg[2 * node + 1]);
+	}
+}
+
+// Function to return the OR
+// of elements in the range [l, r]
+int query(int node, int l, int r,
+		int start, int end, int a[])
+{
+	// Check for out of bound condition
+	if (l > end or r < start)
+		return 0;
+
+	if (start <= l and r <= end)
+		return seg[node];
+
+	// Find middle of the range
+	int mid = (l + r) / 2;
+
+	// Recurse for all the elements in array
+	return ((query(2 * node, l, mid,
+				start, end, a))
+			| (query(2 * node + 1, mid + 1,
+					r, start, end, a)));
+}
+
+// Function to find the OR sum
+void orsum(int a[], int n, int q, int k[])
+{
+	// Function to build the segment Tree
+	build(1, 0, n - 1, a);
+
+	// Loop to handle q queries
+	for (int j = 0; j < q; j++) {
+		// Effective number of
+		// right circular shifts
+		int i = k[j] % (n / 2);
+
+		// Calculating the OR of
+		// the two halves of the
+		// array from the segment tree
+
+		// OR of second half of the
+		// array [n/2-i, n-1-i]
+		int sec = query(1, 0, n - 1,
+						n / 2 - i, n - i - 1, a);
+
+		// OR of first half of the array
+		// [n-i, n-1]OR[0, n/2-1-i]
+		int first = (query(1, 0, n - 1, 0,
+						n / 2 - 1 - i, a)
+					| query(1, 0, n - 1,
+							n - i, n - 1, a));
+
+		int temp = sec + first;
+
+		// Print final answer to the query
+		cout << temp << endl;
+	}
+}
+
+// Driver Code
+int main()
+{
+
+	int a[] = { 7, 44, 19, 86, 65, 39, 75, 101 };
+	int n = sizeof(a) / sizeof(a[0]);
+
+	int q = 2;
+
+	int k[q] = { 4, 2 };
+
+	orsum(a, n, q, k);
+
+	return 0;
+}

@@ -1,0 +1,88 @@
+// C++ program to implement above approach
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to obtain the permutation
+vector<int> Calculate(int n, int m,
+					vector<pair<int, int> > arr)
+{
+	// Prepare an empty array ans
+	vector<int> ans;
+	vector<int> indegree(n);
+	vector<vector<int> > out(n);
+
+	// Build the directed graph
+	for (int i = 0; i < m; i++) {
+		int a = arr[i].first;
+		int b = arr[i].second;
+		a--;
+		b--;
+
+		// Calculate indegree of every element
+		indegree[b] = indegree[b] + 1;
+
+		// Store connection of each node
+		out[a].push_back(b);
+	}
+
+	// Declaring the min heap
+	priority_queue<int, vector<int>,
+				greater<int> >
+		heap;
+
+	for (int i = 0; i < n; ++i) {
+		if (indegree[i] == 0) {
+
+			// Push elements in priority queue
+			// if indegree is 0
+			heap.push(i);
+		}
+	}
+
+	// Run topological sort
+	while (!heap.empty()) {
+
+		// Choose vertex with degree 0,
+		// denoted by i
+		int i = heap.top();
+		heap.pop();
+
+		// Push i+1 to the tail of ans
+		ans.push_back(i + 1);
+
+		// Remove i and edges going out from i
+		for (int j : out[i]) {
+			indegree[j] -= 1;
+
+			// In the process if any node's indegree
+			// becomes 0 then push the element
+			// to the priority queue
+			if (indegree[j] == 0) {
+				heap.push(j);
+			}
+		}
+	}
+
+	// If size of ans is not n then
+	// output would is not possible
+	if (ans.size() != n) {
+		ans.clear();
+		ans.push_back(-1);
+	}
+	return ans;
+}
+
+// Driver code
+int main()
+{
+	int N = 4, M = 3;
+	vector<pair<int, int> > arr
+		= { { 2, 1 }, { 3, 4 }, { 2, 4 } };
+
+	// Function call
+	vector<int> res = Calculate(N, M, arr);
+	for (int x : res)
+		cout << x << " ";
+	return 0;
+}

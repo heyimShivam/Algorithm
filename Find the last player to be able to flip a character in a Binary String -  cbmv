@@ -1,0 +1,92 @@
+// C++ program for the above approach
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to check if player A wins
+// the game or not
+void findWinner(string a, int n)
+{
+	// Stores size of the groups of 0s
+	vector<int> v;
+
+	// Stores size of the group of 0s
+	int c = 0;
+
+	// Traverse the array
+	for (int i = 0; i < n; i++) {
+
+		// Increment c by 1 if a[i] is 0
+		if (a[i] == '0') {
+			c++;
+		}
+
+		// Otherwise, push the size
+		// in array and reset c to 0
+		else {
+			if (c != 0)
+				v.push_back(c);
+			c = 0;
+		}
+	}
+	if (c != 0)
+		v.push_back(c);
+
+	// If there is no substring of
+	// odd length consisting only of 0s
+	if (v.size() == 0) {
+		cout << "Player B";
+		return;
+	}
+
+	// If there is only 1 substring of
+	// odd length consisting only of 0s
+	if (v.size() == 1) {
+		if (v[0] & 1)
+			cout << "Player A";
+
+		// Otherwise
+		else
+			cout << "Player B";
+		return;
+	}
+
+	// Stores the size of the largest
+	// and second largest substrings of 0s
+	int first = INT_MIN;
+	int second = INT_MIN;
+
+	// Traverse the array v[]
+	for (int i = 0; i < v.size(); i++) {
+
+		// If current element is greater
+		// than first, then update both
+		// first and second
+		if (a[i] > first) {
+			second = first;
+			first = a[i];
+		}
+
+		// If arr[i] is in between
+		// first and second, then
+		// update second
+		else if (a[i] > second
+				&& a[i] != first)
+			second = a[i];
+	}
+
+	// If the condition is satisfied
+	if ((first & 1)
+		&& (first + 1) / 2 > second)
+		cout << "Player A";
+	else
+		cout << "Player B";
+}
+
+int main()
+{
+	string S = "1100011";
+	int N = S.length();
+	findWinner(S, N);
+
+	return 0;
+}

@@ -1,0 +1,58 @@
+// C++ program for the above approach
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find the maximum number
+// of unique squares that can be formed
+// from the given N points
+int maximumUniqueSquares(int N)
+{
+	// Stores the resultant count of
+	// squares formed
+	int ans = 0;
+
+	// Base Case
+	if (N < 4) {
+		return 0;
+	}
+
+	// Subtract the maximum possible
+	// grid size as sqrt(N)
+	int len = (sqrt(double(N)));
+	N -= len * len;
+
+	// Find the total squares till now
+	// for the maximum grid
+	for (int i = 1; i < len; i++) {
+
+		// A i*i grid contains (i-1)*(i-1)
+		// + (i-2)*(i-2) + ... + 1*1 squares
+		ans += i * i;
+	}
+
+	// When N >= len then more squares
+	// will be counted
+	if (N >= len) {
+		N -= len;
+		for (int i = 1; i < len; i++) {
+			ans += i;
+		}
+	}
+
+	for (int i = 1; i < N; i++) {
+		ans += i;
+	}
+
+	// Return total count of squares
+	return ans;
+}
+
+// Driver Code
+int main()
+{
+	int N = 9;
+	cout << maximumUniqueSquares(N);
+
+	return 0;
+}

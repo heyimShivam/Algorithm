@@ -1,0 +1,114 @@
+// C++ code to implement the approach
+#include <bits/stdc++.h>
+using namespace std;
+
+// Variable to store the result
+bool res;
+
+// Function to check the additive sequence
+void check_additive(string s,
+					vector<long long>& v,
+					long st)
+{
+	// If the end is reached and vector
+	// consists of more than 2 numbers then
+	// one of the possible solution is found
+	if (st == s.length() and v.size() > 2) {
+		
+		// Mark the res as true to indicate
+		// the solution is found and
+		// to avoid for trying
+		// the rest of the combinations
+		res = true;
+
+		return;
+	}
+
+	long long a, b, c = 0;
+	if (v.size() >= 2) {
+		
+		// Store the previous two numbers
+		// of the sequence to check the
+		// additive sequence property
+		// for the next number
+		b = v[v.size() - 1];
+		a = v[v.size() - 2];
+	}
+
+	for (long i = st; i < s.length(); i++) {
+
+		// Generate the number
+		c = c * 10 + (s[i] - '0');
+
+		// Try all the possible ways
+		// to generate the first two numbers
+		// i.e. if vector consists of
+		// less than two numbers and
+		// no solution is found yet
+		if (v.size() < 2 and !res) {
+			v.push_back(c);
+			check_additive(s, v, i + 1);
+			
+			// Pop the value to try for the
+			// other combination
+			v.pop_back();
+		}
+
+		// If the number generated so far
+		// is greater than the sum of
+		// previous two numbers in
+		// the sequence then it cannot be
+		// a part of additive sequence
+		// hence no need to proceed further
+		else if (c > (a + b) and !res)
+			return;
+
+		// If the number generated so far
+		// is equal to the sum of
+		// previous two numbers then
+		// it can be a part of additive
+		// sequence; push it into vector
+		// and check for remaining string
+		else if (c == a + b and !res) {
+			
+			// Store it in the vector
+			v.push_back(c);
+			
+			// Recur for remaining string
+			check_additive(s, v, i + 1);
+
+			// If unable to find solution
+			// pop it and try for
+			// other combination
+			v.pop_back();
+		}
+	}
+	return;
+}
+
+// Function to check if additive sequence
+bool isAdditiveSequence(string str)
+{
+	// In order to form additive sequence
+	// the length of the string
+	// must be atleast three
+	if (str.length() <= 2)
+		return false;
+
+	vector<long long> v;
+	res = false;
+	check_additive(str, v, 0);
+	return res;
+}
+
+// Driver code
+int main()
+{
+	string str = "199100199";
+	bool ans = isAdditiveSequence(str);
+	if (ans)
+		cout << "true";
+	else
+		cout << "false";
+	return 0;
+}

@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int
+ll dp[18][2] ;
+ll couunt(string s,int n,bool tights){
+    if(tights==0){
+        return (pow(10,n)+0.1);
+    }
+ 
+    if(n==0){
+        return 1;
+    }
+ 
+    int ub=tights?(s[s.length()-n]-'0'):9;
+    ll ans=0;
+    for(ll i=0;i<=ub;i++){
+        ans+=couunt(s,n-1,(tights&&(i==ub)));
+    }
+ 
+    return ans;
+}
+ll solve(string s,int n,bool tights){
+    if(n==0){
+        return 0;
+    }
+    if(dp[n][tights]!=-1){
+        return dp[n][tights];
+    }
+    int ub=tights?(s[s.length()-n]-'0'):9;
+    ll ans=0;
+    for(ll i=0;i<=ub;i++){
+        ans+=i*couunt(s,n-1,(tights&&(i==ub)));
+        ans+=solve(s,n-1,(tights&(i==ub)));
+    }
+ 
+    return dp[n][tights]=ans;
+}
+int main(){
+    ll t;
+    cin>>t;
+    while(t--){
+        ll L,R;
+        cin>>L>>R;
+       if(L!=0){
+        L--;
+       }
+ 
+        string l=to_string(L);
+        string r=to_string(R);
+        memset(dp,-1,sizeof dp);
+        ll fr=solve(r,r.length(),1);
+        memset(dp,-1,sizeof dp);
+        ll fl=solve(l,l.length(),1);
+ 
+        cout<<(fr-fl)<<endl;
+    }
+} 

@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int
+ll dp[20][12][2][2];
+ll solve(string s,int n,int x,bool leading_zeros,bool tight){
+   if(n==0)  return 1;
+ 
+   if(dp[n][x][leading_zeros][tight]!=-1&&x!=-1){
+    return dp[n][x][leading_zeros][tight];
+   }
+ 
+   int ub=tight?(s[s.length()-n]-'0'):9;
+   ll ans=0;
+   for(int i=0;i<=ub;i++){
+    if(i==x&&(leading_zeros==0))
+        continue;
+        ans+=solve(s,n-1,i,(leading_zeros&&(i==0)),(tight&(ub==i)));
+    
+   }
+ 
+   return dp[n][x][leading_zeros][tight]=ans;
+ 
+}
+int main(){
+    ll a,b;
+    cin>>a>>b;
+    
+    string r=to_string(b);
+    string l=to_string(a-1);
+    memset(dp,-1,sizeof dp);
+   ll sor=solve(r,r.length(),-1,1,1);
+   memset(dp,-1,sizeof dp);
+   ll sol=solve(l,l.length(),-1,1,1);
+ 
+   cout<<(sor-sol)<<endl;
+ 
+}

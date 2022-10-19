@@ -1,0 +1,59 @@
+// C++ program for the above approach
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to perform all the queries
+void performQueries(int n, int q, int k,
+					vector<int>& arr,
+					vector<vector<int> >& query)
+{
+	for (int i = 1; i <= q; i++) {
+
+		// Stores the count of 0s
+		int count = 0;
+
+		// Count the number of 0s for
+		// query of type 1
+		if (query[i - 1][0] == 1) {
+			for (int j = query[i - 1][1];
+				j <= query[i - 1][2]; j++) {
+
+				if (arr[j] == k)
+					count++;
+			}
+			cout << count << endl;
+		}
+
+		// Update the array element for
+		// query of type 2
+		else {
+			arr[query[i - 1][1]]
+				= query[i - 1][2];
+		}
+	}
+}
+
+// Driver Code
+int main()
+{
+	vector<int> arr = { 9, 5, 7, 6, 9,
+						0, 0, 0, 0, 5,
+						6, 7, 3, 9, 0,
+						7, 0, 9, 0 };
+	int Q = 5;
+
+	vector<vector<int> > query
+		= { { 1, 5, 14 },
+			{ 2, 6, 1 },
+			{ 1, 0, 8 },
+			{ 2, 13, 0 },
+			{ 1, 6, 18 } };
+	int N = arr.size();
+
+	int K = 0;
+
+	performQueries(N, Q, K, arr, query);
+
+	return 0;
+}
