@@ -35,4 +35,4 @@ int main()
 }
 
 // This code is contributed
-// by SHAINA
+// by Shaina
